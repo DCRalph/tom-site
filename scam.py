@@ -4,45 +4,24 @@ import json
 import threading
 import signal
 import sys
+import time
 
-url = 'https://tom.co.nz/form/contact.php'
+url = 'https://tom.co.nz/form/contact1.php'
 
 names = json.loads(open('names.json').read())
 
 threads = 20
-run_threads = True
 
 sent = 0
 sent2 = 0
 failed = 0
-
-def signal_handler(signal, frame):
-	global run_threads
-	run_threads = False
-
-	print()
-	print('saved ' + str(sent + threads))
-	print()
-
-	f = open("c.txt", "r")
-	x = int(f.read())
-	f.close()
-
-	f = open("c.txt", "w")
-	f.write(str(x + sent + threads))
-	f.close()
-
-	req = requests.post('https://tom.dcralph.com', allow_redirects=False, data={'count': sent + threads})
-    # sys.exit(0)
-
-signal.signal(signal.SIGINT, signal_handler)
 
 def worker():
 	global sent
 	global sent2
 	global failed
 	global run_threads
-	while run_threads == True:
+	while 1:
 		name = names[random.randrange(0,len(names) - 1)]
 
 		email = name.lower() + str(random.randrange(10,1000)) + '@npctom.com'
@@ -70,3 +49,8 @@ def worker():
 for i in range(threads):
     t = threading.Thread(target=worker)
     t.start()
+
+while 1:
+	time.sleep(10)
+	api = requests.post('https://tom.dcralph.com', allow_redirects=False, data={'count': sent})
+	print(api.status_code)

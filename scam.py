@@ -12,15 +12,18 @@ names = json.loads(open('names.json').read())
 
 threads = 20
 
-sent = 0
-sent2 = 0
-failed = 0
+sentTotal = 0
+failedTotal = 0
+
+sentPer = 0
+
 
 def worker():
-	global sent
-	global sent2
-	global failed
-	global run_threads
+	global sentTotal
+	global failedTotal
+
+	global sentPer
+	
 	while 1:
 		name = names[random.randrange(0,len(names) - 1)]
 
@@ -35,13 +38,13 @@ def worker():
 		})
 
 		if req.status_code == 200:
-			sent += 1
-			sent2 += 1
+			sentTotal += 1
+			sentPer += 1
 		else:
-			failed += 1
+			failedTotal += 1
 
 		# print('name: %s \t and email %s \t req= %s' % (name, email, req.status_code))
-		print('req= %s\tsent= %i\tsent2= %i\tfailed= %i\tid= %s' % (req.status_code, sent, sent2, failed, str(threading.current_thread().name)))
+		print('req= %s\tsent= %i\tfailed= %i\tid= %s' % (req.status_code, sentTotal, failedTotal, str(threading.current_thread().name)))
 		# print(req.text)
 
 
@@ -50,7 +53,7 @@ for i in range(threads):
     t.start()
 
 while 1:
-	time.sleep(10)
-	api = requests.post('https://tom.dcralph.com', allow_redirects=False, data={'count': sent2})
+	time.sleep(60)
+	api = requests.post('https://tom.dcralph.com', allow_redirects=False, data={'count': sentPer})
 	print(api.status_code)
-	sent2 = 0
+	sentPer = 0

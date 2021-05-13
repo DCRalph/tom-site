@@ -36,11 +36,10 @@ def worker():
 
 		if req.status_code == 200:
 			sent += 1
+			sent2 += 1
 		else:
 			failed += 1
 
-		if req.text == 'Your message successfully submitted. Thank you, I will get back to you soon!':
-			sent2 += 1
 		# print('name: %s \t and email %s \t req= %s' % (name, email, req.status_code))
 		print('req= %s\tsent= %i\tsent2= %i\tfailed= %i\tid= %s' % (req.status_code, sent, sent2, failed, str(threading.current_thread().name)))
 		# print(req.text)
@@ -52,5 +51,6 @@ for i in range(threads):
 
 while 1:
 	time.sleep(10)
-	api = requests.post('https://tom.dcralph.com', allow_redirects=False, data={'count': sent})
+	api = requests.post('https://tom.dcralph.com', allow_redirects=False, data={'count': sent2})
 	print(api.status_code)
+	sent2 = 0

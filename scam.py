@@ -16,6 +16,7 @@ sentTotal = 0
 failedTotal = 0
 
 sentPer = 0
+failedPer = 0
 
 
 def worker():
@@ -23,6 +24,7 @@ def worker():
 	global failedTotal
 
 	global sentPer
+	global failedPer
 	
 	while 1:
 		name = names[random.randrange(0,len(names) - 1)]
@@ -42,6 +44,7 @@ def worker():
 			sentPer += 1
 		else:
 			failedTotal += 1
+			failedPer += 1
 
 		# print('name: %s \t and email %s \t req= %s' % (name, email, req.status_code))
 		print('req= %s\tsent= %i\tfailed= %i\tid= %s' % (req.status_code, sentTotal, failedTotal, str(threading.current_thread().name)))
@@ -54,6 +57,7 @@ for i in range(threads):
 
 while 1:
 	time.sleep(10)
-	api = requests.post('https://tom.dcralph.com', allow_redirects=False, data={'count': sentPer})
+	api = requests.post('https://tom.dcralph.com', allow_redirects=False, data={'sent': sentPer, 'failed': failedPer})
 	print(api.status_code)
 	sentPer = 0
+	failedPer = 0

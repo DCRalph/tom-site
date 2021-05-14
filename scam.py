@@ -53,7 +53,7 @@ for i in range(threads):
     t.start()
 
 while 1:
-	time.sleep(60)
+	time.sleep(10)
 	api = requests.post('https://tom.dcralph.com', allow_redirects=False, data={'count': sentPer})
 	print(api.status_code)
 	sentPer = 0

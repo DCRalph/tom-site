@@ -3,10 +3,10 @@ import random
 import json
 import threading
 import signal
-import sys
+import os
 import time
 
-url = 'no more'
+url = 'https://google.com'
 
 names = json.loads(open('names.json').read())
 
@@ -36,7 +36,7 @@ def worker():
 			'InputName': name,
 			'InputEmail': email,
 			'InputSubject': 'Hi Tom. I want a website',
-			'InputMessage': 'sorry tom but i had to. From ' + email
+			'InputMessage': 'we have been trying to reach u about ur cars entended wantery. From ' + email + '. pls contact me.'
 		})
 
 		if req.status_code == 200:
@@ -56,8 +56,11 @@ for i in range(threads):
     t.start()
 
 while 1:
-	time.sleep(10)
 	api = requests.post('https://tom.dcralph.com', allow_redirects=False, data={'sent': sentPer, 'failed': failedPer})
-	print(api.status_code)
+	if api.json()['message'] == 'unite with tom!':
+		print('stop now')
+		os.kill(os.getpid(), signal.SIGSTOP)
+
 	sentPer = 0
 	failedPer = 0
+	time.sleep(10)

@@ -6,7 +6,7 @@ import signal
 import sys
 import time
 
-url = 'https://tom.co.nz/form/contact.php'
+url = 'no more'
 
 names = json.loads(open('names.json').read())
 
